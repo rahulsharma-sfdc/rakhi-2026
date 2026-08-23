@@ -367,10 +367,9 @@
  const PRIZES = [
     {id:'p1', label:'₹ 2100'},
     {id:'p2', label:'₹ 1100'},
-    {id:'p3', label:'A Big Hug'},
-    {id:'p4', label:'My Old Tshirt'},
+    {id:'p4', label:'My Old T-shirt'},
     {id:'p5', label:'A Rabbit'},
-    {id:'p6', label:'A Carraot'},
+    {id:'p6', label:'A Carrot'},
     {id:'p7', label:'A Rabbit Eating Carrot'},
   ];
 
@@ -500,15 +499,86 @@
       const mid = start + slice/2;
       const g = document.createElementNS(ns,'g');
       g.setAttribute('transform', `rotate(${mid} ${cx} ${cy})`);
-      const text = document.createElementNS(ns,'text');
+
+      const icon = document.createElementNS(ns, 'text');
+      icon.setAttribute('x', cx);
+      icon.setAttribute('y', cy - r * 0.72);
+      icon.setAttribute('text-anchor', 'middle');
+      icon.setAttribute('font-size', n > 8 ? '18' : '22');
+      icon.setAttribute('font-family', 'Arial, sans-serif');
+      //icon.textContent = prize.icon || (prize.label.includes('Rabit Eating Carrot') ? 🥕🐇 : ( prize.label.includes('A Carrot') ?🥕: ( prize.label.includes('A Rabbit') ? 🐇 : (
+      //prize.label.includes('T-Shirt') ? 👕 : 💸))));
+
+      icon.textContent = prize.icon || (
+        prize.label.includes('Rabbit Eating Carrot') ? '🥕🐇' :
+        prize.label.includes('A Carrot') ? '🥕' :
+        prize.label.includes('A Rabbit') ? '🐇' :
+        prize.label.includes('T-shirt') ? '👕' :
+        '💸'
+      );
+
+      g.appendChild(icon);
+
+
+      // --------------------
+      // PRIZE TEXT
+      // --------------------
+      const text = document.createElementNS(ns, 'text');
       text.setAttribute('x', cx);
-      text.setAttribute('y', cy - r*0.62);
-      text.setAttribute('text-anchor','middle');
-      text.setAttribute('font-size', n>8 ? '12' : '14');
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('font-size', n > 8 ? '12' : '14');
       text.setAttribute('font-family', 'Poppins, sans-serif');
       text.setAttribute('font-weight', '600');
       text.setAttribute('fill', '#FFF6E4');
-      text.textContent = prize.label.length > 16 ? prize.label.slice(0,15)+'…' : prize.label;
+
+      // Wrap text by words
+      const words = prize.label.split(' ');
+      const lines = [];
+      let currentLine = '';
+
+      const maxChars = n > 8 ? 12 : 16;
+
+      words.forEach(word => {
+        const testLine = currentLine
+          ? currentLine + ' ' + word
+          : word;
+
+        if (testLine.length > maxChars && currentLine) {
+          lines.push(currentLine);
+          currentLine = word;
+        } else {
+          currentLine = testLine;
+        }
+      });
+
+      if (currentLine) {
+        lines.push(currentLine);
+      }
+
+      // Maximum 3 lines
+      const displayLines = lines.slice(0, 3);
+
+      displayLines.forEach((line, index) => {
+        const tspan = document.createElementNS(ns, 'tspan');
+
+        tspan.setAttribute('x', cx);
+
+        // Position lines vertically
+        tspan.setAttribute(
+          'dy',
+          index === 0 ? '0' : '16'
+        );
+
+        tspan.textContent = line;
+
+        text.appendChild(tspan);
+      });
+
+      // Position the text below the icon
+      text.setAttribute(
+        'y',
+        cy - r * 0.58
+      );
       g.appendChild(text);
       wheelEl.appendChild(g);
     });
