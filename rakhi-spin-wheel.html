@@ -8,15 +8,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg-deep:#3E0F22;
-    --bg-mid:#7A2340;
+    --bg-deep:#FFDFA0;
+    --bg-mid:#FFF8EA;
     --gold:#E7A33B;
     --gold-light:#F3C877;
     --saffron:#EF7C3C;
-    --cream:#FFF6E4;
+    --cream:#FFFBF2;
     --thread-red:#C1272D;
     --leaf:#4F7A52;
-    --shadow-deep: rgba(0,0,0,0.45);
+    --ink:#5C1A2E;
+    --maroon:#7A2340;
+    --shadow-deep: rgba(150,80,40,.25);
   }
   *{box-sizing:border-box;}
   body{
@@ -24,9 +26,9 @@
     min-height:100vh;
     font-family:'Poppins',sans-serif;
     background:
-      radial-gradient(ellipse at top, var(--bg-mid) 0%, var(--bg-deep) 65%),
-      linear-gradient(180deg, var(--bg-deep), #260916);
-    color:var(--cream);
+      radial-gradient(ellipse at top, var(--bg-mid) 0%, var(--bg-deep) 70%),
+      linear-gradient(180deg, var(--bg-deep), #FFF3DA);
+    color:var(--ink);
     overflow-x:hidden;
     position:relative;
   }
@@ -69,15 +71,30 @@
     font-family:'Yatra One',cursive;
     font-size:clamp(2.1rem, 5vw, 3.4rem);
     margin:0;
-    color:var(--gold-light);
-    text-shadow:0 2px 0 var(--thread-red), 0 8px 24px var(--shadow-deep);
+    color:var(--thread-red);
+    text-shadow:0 2px 0 var(--gold-light), 0 8px 20px var(--shadow-deep);
     letter-spacing:1px;
   }
   header p{
     margin:8px 0 0;
     font-size:1rem;
-    color:var(--cream);
-    opacity:.85;
+    color:var(--ink);
+    opacity:.75;
+  }
+  .rakhi-icon{
+    display:block;
+    margin:16px auto 0;
+    width:74px;height:74px;
+    animation:iconIn .6s ease, iconSway 4s ease-in-out 1s infinite;
+    transform-origin:top center;
+  }
+  @keyframes iconIn{
+    from{ transform:scale(.4) rotate(-15deg); opacity:0; }
+    to{ transform:scale(1) rotate(0deg); opacity:1; }
+  }
+  @keyframes iconSway{
+    0%,100%{ transform:rotate(-3deg); }
+    50%{ transform:rotate(3deg); }
   }
 
   main{
@@ -86,44 +103,21 @@
     padding:20px 16px 60px;
   }
 
-  /* ---------- Sister garland picker ---------- */
-  .picker-label{
+  .spinning-for{
     text-align:center;
-    font-size:.85rem;
-    text-transform:uppercase;
-    letter-spacing:2px;
-    color:var(--gold-light);
-    margin-bottom:10px;
-  }
-  .garland{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    justify-content:center;
+    font-size:1.3rem;
+    font-family:'Yatra One',cursive;
+    color:var(--thread-red);
     margin-bottom:26px;
+    min-height:1.4em;
   }
-  .sister-pill{
-    padding:9px 18px;
-    border-radius:999px;
-    border:2px solid var(--gold);
-    background:rgba(255,255,255,.05);
-    color:var(--cream);
-    font-family:'Poppins',sans-serif;
-    font-weight:600;
-    cursor:pointer;
-    transition:transform .15s ease, background .2s ease;
-  }
-  .sister-pill:hover{transform:translateY(-2px);}
-  .sister-pill.active{
-    background:linear-gradient(135deg, var(--saffron), var(--thread-red));
-    border-color:var(--gold-light);
-    box-shadow:0 4px 16px rgba(239,124,60,.5);
-  }
-  .empty-note{
+  .no-name-note{
     text-align:center;
-    opacity:.7;
+    opacity:.75;
     font-size:.9rem;
-    margin-bottom:20px;
+    max-width:420px;
+    margin:0 auto 24px;
+    line-height:1.5;
   }
 
   /* ---------- Wheel ---------- */
@@ -150,14 +144,14 @@
     inset:10px;
     border-radius:50%;
     overflow:hidden;
-    box-shadow:0 0 0 6px var(--bg-deep), 0 0 0 10px var(--gold);
+    box-shadow:0 0 0 6px var(--ink), 0 0 0 10px var(--gold);
     background:var(--cream);
   }
   #wheel{
     width:100%;height:100%;
     display:block;
     transform:rotate(0deg);
-    transition:transform 4.2s cubic-bezier(.18,.9,.16,1);
+    transition:transform var(--spin-duration, 4.2s) cubic-bezier(.18,.9,.16,1);
   }
   .hub{
     position:absolute;
@@ -196,7 +190,7 @@
     padding:12px 46px;
     border:none;
     border-radius:999px;
-    color:var(--bg-deep);
+    color:var(--ink);
     background:linear-gradient(135deg, var(--gold-light), var(--gold));
     cursor:pointer;
     box-shadow:0 8px 20px rgba(231,163,59,.4);
@@ -204,12 +198,6 @@
   }
   .spin-btn:disabled{opacity:.4;cursor:not-allowed;}
   .spin-btn:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(231,163,59,.55);}
-
-  .spinning-for{
-    min-height:1.2em;
-    font-size:.95rem;
-    opacity:.85;
-  }
 
   /* ---------- Result modal ---------- */
   .overlay{
@@ -224,7 +212,7 @@
   .overlay.show{display:flex;}
   .result-card{
     background:linear-gradient(160deg, var(--cream), #FFEFC9);
-    color:var(--bg-deep);
+    color:var(--ink);
     border-radius:22px;
     padding:34px 30px;
     text-align:center;
@@ -248,7 +236,7 @@
   .result-card .prize{
     font-size:1.5rem;
     font-weight:700;
-    color:var(--bg-mid);
+    color:var(--maroon);
     margin:10px 0 16px;
   }
   .result-card .msg{
@@ -278,129 +266,60 @@
     to{ transform:translateY(105vh) rotate(360deg); opacity:.2; }
   }
 
-  /* ---------- Admin / control room ---------- */
-  .control-toggle{
-    display:block;
-    margin:50px auto 0;
-    background:none;
-    border:1px solid rgba(255,255,255,.3);
-    color:var(--cream);
-    padding:8px 18px;
-    border-radius:999px;
-    font-size:.8rem;
-    cursor:pointer;
-    opacity:.7;
-  }
-  .control-room{
-    display:none;
-    margin-top:20px;
+  .sound-toggle{
+    position:fixed;
+    top:14px;right:14px;
+    width:42px;height:42px;
+    border-radius:50%;
+    border:2px solid var(--gold);
     background:rgba(0,0,0,.25);
-    border:1px dashed var(--gold);
-    border-radius:16px;
-    padding:20px;
-  }
-  .control-room.show{display:block;}
-  .control-room h3{
-    font-family:'Yatra One',cursive;
-    color:var(--gold-light);
-    margin-top:0;
-  }
-  .control-room h4{
-    color:var(--gold-light);
-    margin-bottom:8px;
-    font-size:.95rem;
-    text-transform:uppercase;
-    letter-spacing:1px;
-  }
-  .row-add{
-    display:flex;
-    gap:8px;
-    margin-bottom:14px;
-    flex-wrap:wrap;
-  }
-  .row-add input{
-    flex:1;
-    min-width:140px;
-    padding:8px 12px;
-    border-radius:8px;
-    border:1px solid var(--gold);
-    background:rgba(255,255,255,.9);
-    color:#222;
-  }
-  .row-add button{
-    padding:8px 16px;
-    border:none;
-    border-radius:8px;
-    background:var(--gold);
-    color:var(--bg-deep);
-    font-weight:600;
-    cursor:pointer;
-  }
-  .list-item{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:8px 0;
-    border-bottom:1px solid rgba(255,255,255,.1);
-    flex-wrap:wrap;
-  }
-  .swatch{
-    width:16px;height:16px;
-    border-radius:4px;
-    flex-shrink:0;
-  }
-  .list-item span.name{flex:1;min-width:100px;}
-  .list-item select{
-    padding:6px 8px;
-    border-radius:6px;
-    border:1px solid var(--gold);
-  }
-  .del-btn{
-    background:none;
-    border:none;
-    color:var(--thread-red);
+    color:var(--cream);
     font-size:1.1rem;
     cursor:pointer;
+    z-index:70;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .15s ease;
   }
-  .divider{
-    height:1px;
-    background:rgba(255,255,255,.15);
-    margin:20px 0;
-  }
-  .reset-btn{
-    background:none;
-    border:1px solid var(--thread-red);
-    color:var(--thread-red);
-    padding:8px 16px;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:.85rem;
-  }
-  .hint{
-    font-size:.78rem;
-    opacity:.65;
-    margin-top:6px;
-  }
+  .sound-toggle:hover{transform:scale(1.08);}
 
   @media (prefers-reduced-motion: reduce){
-    .tassel,.flame{animation:none;}
+    .tassel,.flame,.rakhi-icon{animation:none;}
     #wheel{transition:none;}
   }
 </style>
 </head>
 <body>
 
+<button class="sound-toggle" id="soundToggle" title="Toggle sound" aria-label="Toggle sound">🔊</button>
 <div class="tassel-row" id="tasselRow"></div>
 
 <header>
-  <h1>Spin the Rakhi Wheel 🪢</h1>
-  <p>Ek chakkar, ek surprise, ek pyaar bhara wada — Happy Raksha Bandhan!</p>
+  <h1>Spin the Rakhi Wheel
+  <svg class="rakhi-icon" viewBox="0 0 100 100" aria-hidden="true">
+    <!-- <path d="M38 10 Q50 -6 62 10" fill="none" stroke="#E7A33B" stroke-width="5" stroke-linecap="round"/> -->
+    <g>
+      <ellipse cx="50" cy="24" rx="6" ry="13" fill="#EF7C3C"/>
+      <ellipse cx="50" cy="24" rx="6" ry="13" fill="#EF7C3C" transform="rotate(45 50 50)"/>
+      <ellipse cx="50" cy="24" rx="6" ry="13" fill="#EF7C3C" transform="rotate(90 50 50)"/>
+      <ellipse cx="50" cy="24" rx="6" ry="13" fill="#EF7C3C" transform="rotate(135 50 50)"/>
+      <ellipse cx="50" cy="24" rx="6" ry="13" fill="#EF7C3C" transform="rotate(180 50 50)"/>
+      <ellipse cx="50" cy="24" rx="6" ry="13" fill="#EF7C3C" transform="rotate(225 50 50)"/>
+      <ellipse cx="50" cy="24" rx="6" ry="13" fill="#EF7C3C" transform="rotate(270 50 50)"/>
+      <ellipse cx="50" cy="24" rx="6" ry="13" fill="#EF7C3C" transform="rotate(315 50 50)"/>
+    </g>
+    <circle cx="50" cy="50" r="17" fill="#E7A33B" stroke="#C1272D" stroke-width="2.5"/>
+    <circle cx="50" cy="50" r="8" fill="#C1272D"/>
+    <circle cx="50" cy="50" r="3.2" fill="#F3C877"/>
+  </svg>
+</h1>
+  <!-- <p>Ek chakkar, ek surprise, ek pyaar bhara wada — Happy Raksha Bandhan!</p> -->
 </header>
 
 <main>
-  <div class="picker-label">Who's spinning today?</div>
-  <div class="garland" id="garland"></div>
-  <div class="empty-note" id="emptyNote" style="display:none;">Add your sisters' names in the control room below 👇</div>
+  <div class="spinning-for" id="spinningFor"></div>
+  <div class="no-name-note" id="noNameNote" style="display:none;"></div>
 
   <div class="wheel-zone">
     <div class="wheel-wrap">
@@ -417,33 +336,7 @@
       </div>
     </div>
 
-    <div class="spinning-for" id="spinningFor"></div>
     <button class="spin-btn" id="spinBtn" disabled>Spin!</button>
-  </div>
-
-  <button class="control-toggle" id="toggleAdmin">🔒 Bhaiya's Control Room</button>
-  <div class="control-room" id="controlRoom">
-    <h3>Bhaiya's Control Room</h3>
-    <p class="hint">This is where you fix what each sister lands on. Not real security — just for fun, so peek responsibly if you're not the bhai! 😄</p>
-
-    <h4>Prizes on the wheel</h4>
-    <div class="row-add">
-      <input type="text" id="newPrize" placeholder="e.g. ₹501 Cash, Movie Date...">
-      <button id="addPrizeBtn">Add prize</button>
-    </div>
-    <div id="prizeList"></div>
-
-    <div class="divider"></div>
-
-    <h4>Sisters</h4>
-    <div class="row-add">
-      <input type="text" id="newSister" placeholder="Sister's name">
-      <button id="addSisterBtn">Add sister</button>
-    </div>
-    <div id="sisterList"></div>
-
-    <div class="divider"></div>
-    <button class="reset-btn" id="resetBtn">Reset everything to defaults</button>
   </div>
 </main>
 
@@ -451,56 +344,129 @@
   <div class="result-card">
     <h2 id="resultName"></h2>
     <div class="prize" id="resultPrize"></div>
-    <div class="msg">Happy Raksha Bandhan! May this thread carry all my love and promises. 🪢✨</div>
+    <h2>🎉🎉🎊🥳🥳</h2>
+    <div class="msg">Happy Raksha Bandhan! May this thread carry all my love and promises.</div>
     <button class="close-btn" id="closeResult">Yay!</button>
   </div>
 </div>
 
 <script>
 (function(){
-  const STORAGE_KEY = 'rakhiWheelData_v1';
   const PALETTE = ['#EF7C3C','#7A2340','#4F7A52','#C1272D','#E7A33B','#8E4A9E','#2E6E7E','#B85C38'];
 
-  const defaultData = {
-    prizes: [
-      {id:'p1', label:'₹501 Cash'},
-      {id:'p2', label:'Chocolate Box'},
-      {id:'p3', label:'Surprise Gift'},
-      {id:'p4', label:'Movie Date'},
-      {id:'p5', label:'Shopping Voucher'},
-      {id:'p6', label:'Homemade Sweets'},
-      {id:'p7', label:'A Big Hug'},
-      {id:'p8', label:'Wildcard Wish'}
-    ],
-    sisters: [
-      {id:'s1', name:'Sister 1', riggedPrizeId:'p1'},
-      {id:'s2', name:'Sister 2', riggedPrizeId:'p3'}
-    ]
-  };
+  // ---------------------------------------------------------------
+  // EDIT THIS SECTION to set up your prizes and each sister's fixed result.
+  // The "id" in riggedPrizeId must match one of the prize ids below.
+  // Leave riggedPrizeId as '' for a genuinely random spin.
+  // Match names are case-insensitive and ignore extra spaces.
+  // ---------------------------------------------------------------
+  // How long the wheel spins for, in seconds. Change this one number
+  // to make every sister's spin faster or slower.
+  const SPIN_DURATION_SECONDS = 4.2;
 
-  function load(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if(raw) return JSON.parse(raw);
-    }catch(e){}
-    return JSON.parse(JSON.stringify(defaultData));
-  }
-  function save(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }
+ const PRIZES = [
+    {id:'p1', label:'₹ 2100'},
+    {id:'p2', label:'₹ 1100'},
+    {id:'p3', label:'A Big Hug'},
+    {id:'p4', label:'My Old Tshirt'},
+    {id:'p5', label:'A Rabbit'},
+    {id:'p6', label:'A Carraot'},
+    {id:'p7', label:'A Rabbit Eating Carrot'},
+  ];
 
-  let data = load();
-  let activeSisterId = null;
+  const SISTERS = [
+    {name:'Mittali', riggedPrizeId:'p1'},
+    {name:'Deepali', riggedPrizeId:'p1'},
+    {name:'Kashish', riggedPrizeId:'p2', hiddenPrizeIds:['p1']},
+    {name:'Urvashi', riggedPrizeId:'p2', hiddenPrizeIds:['p1']}
+    // add more like: {name:'Neha', riggedPrizeId:'p5'},
+  ];
+
+  // ---------------------------------------------------------------
+  // The page is opened as: yoursite.html?name=Priya
+  // Only that one name is shown/spun for — no other names appear.
+  // Each sister only ever sees the prizes NOT listed in her own
+  // hiddenPrizeIds, and riggedPrizeId must point to a prize she can see.
+  // ---------------------------------------------------------------
+
   let currentRotation = 0;
   let spinning = false;
+  let activeSister = null;
+  let currentWheelPrizes = PRIZES;
+
+  // ---------------------------------------------------------------
+  // Sound: everything below is generated live with the Web Audio API
+  // (no audio files needed), so it works offline once hosted.
+  // ---------------------------------------------------------------
+  let audioCtx = null;
+  let muted = false;
+  function getCtx(){
+    if(!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+    return audioCtx;
+  }
+  function playTick(){
+    if(muted) return;
+    const ctx = getCtx();
+    const t = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(680 + Math.random()*60, t);
+    gain.gain.setValueAtTime(0.16, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.07);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.08);
+  }
+  function scheduleSpinTicks(deltaDeg, durationMs, prizeCount){
+    const n = prizeCount;
+    if(n === 0) return;
+    const sliceAngle = 360/n;
+    const totalSegments = Math.max(1, Math.round(deltaDeg/sliceAngle));
+    for(let k=1;k<=totalSegments;k++){
+      const frac = k/totalSegments;
+      const tickTime = durationMs * (1 - Math.pow(1-frac, 1/3)); // matches ease-out deceleration
+      setTimeout(playTick, tickTime);
+    }
+  }
+  function playRevealFanfare(){
+    if(muted) return;
+    const ctx = getCtx();
+    const notes = [523.25, 659.25, 783.99, 1046.5]; // C5 E5 G5 C6
+    notes.forEach((freq, i)=>{
+      const t = ctx.currentTime + i*0.15;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, t);
+      gain.gain.setValueAtTime(0.0001, t);
+      gain.gain.exponentialRampToValueAtTime(0.28, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.65);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.7);
+
+      const shimmer = ctx.createOscillator();
+      const shimmerGain = ctx.createGain();
+      shimmer.type = 'sine';
+      shimmer.frequency.setValueAtTime(freq*2, t);
+      shimmerGain.gain.setValueAtTime(0.0001, t);
+      shimmerGain.gain.exponentialRampToValueAtTime(0.08, t + 0.02);
+      shimmerGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+      shimmer.connect(shimmerGain).connect(ctx.destination);
+      shimmer.start(t);
+      shimmer.stop(t + 0.45);
+    });
+  }
+  document.getElementById('soundToggle').onclick = ()=>{
+    muted = !muted;
+    document.getElementById('soundToggle').textContent = muted ? '🔇' : '🔊';
+  };
 
   const wheelEl = document.getElementById('wheel');
-  const garlandEl = document.getElementById('garland');
-  const emptyNote = document.getElementById('emptyNote');
   const spinBtn = document.getElementById('spinBtn');
   const spinningForEl = document.getElementById('spinningFor');
-  const prizeListEl = document.getElementById('prizeList');
-  const sisterListEl = document.getElementById('sisterList');
+  const noNameNote = document.getElementById('noNameNote');
   const overlay = document.getElementById('overlay');
   const resultName = document.getElementById('resultName');
   const resultPrize = document.getElementById('resultPrize');
@@ -508,22 +474,18 @@
   function colorFor(index){ return PALETTE[index % PALETTE.length]; }
 
   function polar(cx,cy,r,angleDeg){
-    const rad = (angleDeg - 0) * Math.PI/180;
+    const rad = angleDeg * Math.PI/180;
     return { x: cx + r*Math.sin(rad), y: cy - r*Math.cos(rad) };
   }
 
-  function renderWheel(){
-    const prizes = data.prizes;
-    const n = prizes.length;
+  function renderWheel(prizesList){
+    const n = prizesList.length;
     wheelEl.innerHTML = '';
-    if(n === 0){
-      wheelEl.innerHTML = '<text x="200" y="205" text-anchor="middle" font-size="18" fill="#7A2340">Add prizes in the control room</text>';
-      return;
-    }
+    if(n === 0) return;
     const cx=200, cy=200, r=190;
     const slice = 360/n;
     const ns = 'http://www.w3.org/2000/svg';
-    prizes.forEach((prize, i)=>{
+    prizesList.forEach((prize, i)=>{
       const start = i*slice, end = (i+1)*slice;
       const p1 = polar(cx,cy,r,start);
       const p2 = polar(cx,cy,r,end);
@@ -552,124 +514,35 @@
     });
   }
 
-  function renderGarland(){
-    garlandEl.innerHTML = '';
-    if(data.sisters.length === 0){
-      emptyNote.style.display = 'block';
-      spinBtn.disabled = true;
-      return;
-    }
-    emptyNote.style.display = 'none';
-    data.sisters.forEach(s=>{
-      const pill = document.createElement('button');
-      pill.className = 'sister-pill' + (s.id===activeSisterId ? ' active':'');
-      pill.textContent = s.name;
-      pill.onclick = ()=>{
-        activeSisterId = s.id;
-        renderGarland();
-        spinningForEl.textContent = `Spinning for ${s.name} 🪢`;
-        spinBtn.disabled = false;
-      };
-      garlandEl.appendChild(pill);
-    });
+  function normalize(str){
+    return str.trim().toLowerCase().replace(/\s+/g,' ');
   }
 
-  function renderAdmin(){
-    prizeListEl.innerHTML = '';
-    data.prizes.forEach((p,i)=>{
-      const row = document.createElement('div');
-      row.className = 'list-item';
-      row.innerHTML = `<div class="swatch" style="background:${colorFor(i)}"></div><span class="name">${p.label}</span>`;
-      const del = document.createElement('button');
-      del.className = 'del-btn';
-      del.textContent = '✕';
-      del.onclick = ()=>{
-        data.prizes = data.prizes.filter(x=>x.id!==p.id);
-        data.sisters.forEach(s=>{ if(s.riggedPrizeId===p.id) s.riggedPrizeId=''; });
-        save(); renderWheel(); renderAdmin();
-      };
-      row.appendChild(del);
-      prizeListEl.appendChild(row);
-    });
-
-    sisterListEl.innerHTML = '';
-    data.sisters.forEach(s=>{
-      const row = document.createElement('div');
-      row.className = 'list-item';
-      const label = document.createElement('span');
-      label.className = 'name';
-      label.textContent = s.name;
-      row.appendChild(label);
-
-      const select = document.createElement('select');
-      const randomOpt = document.createElement('option');
-      randomOpt.value = '';
-      randomOpt.textContent = 'Random (not fixed)';
-      select.appendChild(randomOpt);
-      data.prizes.forEach(p=>{
-        const opt = document.createElement('option');
-        opt.value = p.id;
-        opt.textContent = p.label;
-        if(s.riggedPrizeId === p.id) opt.selected = true;
-        select.appendChild(opt);
-      });
-      select.onchange = ()=>{ s.riggedPrizeId = select.value; save(); };
-      row.appendChild(select);
-
-      const del = document.createElement('button');
-      del.className = 'del-btn';
-      del.textContent = '✕';
-      del.onclick = ()=>{
-        data.sisters = data.sisters.filter(x=>x.id!==s.id);
-        if(activeSisterId===s.id) activeSisterId=null;
-        save(); renderAdmin(); renderGarland();
-      };
-      row.appendChild(del);
-
-      sisterListEl.appendChild(row);
-    });
+  function getVisiblePrizes(sister){
+    if(!sister || !sister.hiddenPrizeIds || sister.hiddenPrizeIds.length === 0) return PRIZES;
+    return PRIZES.filter(p => !sister.hiddenPrizeIds.includes(p.id));
   }
 
-  document.getElementById('addPrizeBtn').onclick = ()=>{
-    const input = document.getElementById('newPrize');
-    const val = input.value.trim();
-    if(!val) return;
-    data.prizes.push({id:'p'+Date.now(), label:val});
-    input.value='';
-    save(); renderWheel(); renderAdmin();
-  };
-  document.getElementById('addSisterBtn').onclick = ()=>{
-    const input = document.getElementById('newSister');
-    const val = input.value.trim();
-    if(!val) return;
-    data.sisters.push({id:'s'+Date.now(), name:val, riggedPrizeId:''});
-    input.value='';
-    save(); renderAdmin(); renderGarland();
-  };
-  document.getElementById('resetBtn').onclick = ()=>{
-    if(confirm('Reset all prizes and sisters to defaults? This cannot be undone.')){
-      data = JSON.parse(JSON.stringify(defaultData));
-      activeSisterId = null;
-      save(); renderWheel(); renderAdmin(); renderGarland();
+  function resolveSister(){
+    const params = new URLSearchParams(window.location.search);
+    const nameParam = params.get('name');
+    if(!nameParam){
+      noNameNote.style.display = 'block';
+      noNameNote.textContent = 'No name found in the link. Ask your brother for your personal spin link!';
       spinningForEl.textContent = '';
-      spinBtn.disabled = true;
+      return null;
     }
-  };
-
-  document.getElementById('toggleAdmin').onclick = ()=>{
-    const room = document.getElementById('controlRoom');
-    if(room.classList.contains('show')){
-      room.classList.remove('show');
-    } else {
-      const pin = prompt('Enter the Bhaiya PIN to open the control room:');
-      if(pin === '2026'){
-        room.classList.add('show');
-        renderAdmin();
-      } else if(pin !== null){
-        alert('Wrong PIN! (Psst, it is set inside the HTML file — search for "2026" to change it.)');
-      }
+    const match = SISTERS.find(s => normalize(s.name) === normalize(nameParam));
+    if(!match){
+      noNameNote.style.display = 'block';
+      noNameNote.textContent = `Couldn't find "${nameParam}" — double check the link.`;
+      spinningForEl.textContent = '';
+      return null;
     }
-  };
+    noNameNote.style.display = 'none';
+    spinningForEl.textContent = `Spinning for ${match.name}`;
+    return match;
+  }
 
   function spawnConfetti(){
     const colors = ['#EF7C3C','#E7A33B','#C1272D','#F3C877','#4F7A52'];
@@ -689,19 +562,17 @@
   }
 
   spinBtn.onclick = ()=>{
-    if(spinning || !activeSisterId || data.prizes.length===0) return;
-    const sister = data.sisters.find(s=>s.id===activeSisterId);
-    if(!sister) return;
+    if(spinning || !activeSister || currentWheelPrizes.length===0) return;
 
     let targetIndex;
-    if(sister.riggedPrizeId){
-      const idx = data.prizes.findIndex(p=>p.id===sister.riggedPrizeId);
-      targetIndex = idx>=0 ? idx : Math.floor(Math.random()*data.prizes.length);
+    if(activeSister.riggedPrizeId){
+      const idx = currentWheelPrizes.findIndex(p=>p.id===activeSister.riggedPrizeId);
+      targetIndex = idx>=0 ? idx : Math.floor(Math.random()*currentWheelPrizes.length);
     } else {
-      targetIndex = Math.floor(Math.random()*data.prizes.length);
+      targetIndex = Math.floor(Math.random()*currentWheelPrizes.length);
     }
 
-    const n = data.prizes.length;
+    const n = currentWheelPrizes.length;
     const slice = 360/n;
     const sliceCenter = targetIndex*slice + slice/2;
     const jitter = (Math.random()-0.5) * (slice*0.5);
@@ -717,15 +588,20 @@
     spinBtn.disabled = true;
     wheelEl.style.transform = `rotate(${currentRotation}deg)`;
 
+    const spinDurationMs = SPIN_DURATION_SECONDS * 1000;
+    getCtx().resume();
+    scheduleSpinTicks(extraSpins + delta, spinDurationMs, currentWheelPrizes.length);
+
     setTimeout(()=>{
       spinning = false;
       spinBtn.disabled = false;
-      const prize = data.prizes[targetIndex];
-      resultName.textContent = sister.name + ', tumhara reward hai:';
+      const prize = currentWheelPrizes[targetIndex];
+      resultName.textContent = activeSister.name + ', You deserved it! ❤️';
       resultPrize.textContent = prize.label;
       overlay.classList.add('show');
       spawnConfetti();
-    }, 4300);
+      playRevealFanfare();
+    }, spinDurationMs + 100);
   };
 
   document.getElementById('closeResult').onclick = ()=>{
@@ -742,10 +618,12 @@
     }
   }
 
+  document.documentElement.style.setProperty('--spin-duration', SPIN_DURATION_SECONDS + 's');
   buildTassels();
-  renderWheel();
-  renderGarland();
-  renderAdmin();
+  activeSister = resolveSister();
+  currentWheelPrizes = activeSister ? getVisiblePrizes(activeSister) : PRIZES;
+  renderWheel(currentWheelPrizes);
+  spinBtn.disabled = !activeSister;
 })();
 </script>
 </body>
