@@ -362,22 +362,27 @@
   // ---------------------------------------------------------------
   // How long the wheel spins for, in seconds. Change this one number
   // to make every sister's spin faster or slower.
-  const SPIN_DURATION_SECONDS = 4.2;
+  const SPIN_DURATION_SECONDS = 16.0;
 
  const PRIZES = [
-    {id:'p1', label:'₹ 2100'},
-    {id:'p2', label:'₹ 1100'},
-    {id:'p4', label:'My Old T-shirt'},
-    {id:'p5', label:'A Rabbit'},
-    {id:'p6', label:'A Carrot'},
-    {id:'p7', label:'A Rabbit Eating Carrot'},
+    {id:'p1', label:'₹11 Cash'},
+    {id:'p2', label:'My Netflix Password'},
+    {id:'p3', label:'A Mystery Gift'},
+    {id:'p4', label:'Whatever in My Pocket'},
+    {id:'p5', label:'Tickle Monster Attack'},
+    {id:'p6', label:'One Dad Joke'}
   ];
 
+  const SECOND_SPIN_PRIZE = {id:'p1', label:'Shagun Ka Lifafa'};
+
+
   const SISTERS = [
-    {name:'Mittali', riggedPrizeId:'p1'},
-    {name:'Deepali', riggedPrizeId:'p1'},
-    {name:'Kashish', riggedPrizeId:'p2', hiddenPrizeIds:['p1']},
-    {name:'Urvashi', riggedPrizeId:'p2', hiddenPrizeIds:['p1']}
+    {name:'Mittali', riggedPrizeId:'p3'},
+    {name:'Deepali', riggedPrizeId:'p4'},
+    {name:'Kashish', riggedPrizeId:'p5'},
+    {name:'Urvashi', riggedPrizeId:'p6'},
+    {name:'Anonymus', riggedPrizeId:'p6'}
+    //{name:'Urvashi', riggedPrizeId:'p2', hiddenPrizeIds:['p1']}
     // add more like: {name:'Neha', riggedPrizeId:'p5'},
   ];
 
@@ -510,10 +515,12 @@
       //prize.label.includes('T-Shirt') ? 👕 : 💸))));
 
       icon.textContent = prize.icon || (
-        prize.label.includes('Rabbit Eating Carrot') ? '🥕🐇' :
-        prize.label.includes('A Carrot') ? '🥕' :
-        prize.label.includes('A Rabbit') ? '🐇' :
-        prize.label.includes('T-shirt') ? '👕' :
+        prize.label.includes('₹11 Cash') ? '💰' :
+        prize.label.includes('My Netflix Password') ? '📺' :
+        prize.label.includes('A Mystery Gift') ? '🎁' :
+        prize.label.includes('Whatever in My Pocket') ? '😭' :
+        prize.label.includes('Tickle Monster Attack') ? '😈' :
+        prize.label.includes('One Dad Joke') ? '👨‍🦳' :
         '💸'
       );
 
@@ -596,6 +603,9 @@
   function resolveSister(){
     const params = new URLSearchParams(window.location.search);
     const nameParam = params.get('name');
+    if (!nameParam)
+      nameParam = 'Anonymus';
+
     if(!nameParam){
       noNameNote.style.display = 'block';
       noNameNote.textContent = 'No name found in the link. Ask your brother for your personal spin link!';
@@ -631,49 +641,99 @@
     }
   }
 
+  function getSpinCount(sisterName) {
+    const key = 'rakhi_spin_count_' + normalize(sisterName);
+    return parseInt(localStorage.getItem(key) || '0', 10);
+  }
+
+  function incrementSpinCount(sisterName) {
+    const key = 'rakhi_spin_count_' + normalize(sisterName);
+    const count = getSpinCount(sisterName);
+    localStorage.setItem(key, String(count + 1));
+  }
+
   spinBtn.onclick = ()=>{
     if(spinning || !activeSister || currentWheelPrizes.length===0) return;
 
-    let targetIndex;
-    if(activeSister.riggedPrizeId){
-      const idx = currentWheelPrizes.findIndex(p=>p.id===activeSister.riggedPrizeId);
-      targetIndex = idx>=0 ? idx : Math.floor(Math.random()*currentWheelPrizes.length);
+    const spinCount = getSpinCount(activeSister.name);
+    const isSecondSpin = spinCount >= 1;
+
+    let targetPrize;
+
+    if(isSecondSpin){
+      // SECOND SPIN = SHAGUN KA LIFAFA
+      targetPrize = SECOND_SPIN_PRIZE;
+
+      // Temporarily show only the Shagun prize on the wheel
+      //currentWheelPrizes = SECOND_SPIN_PRIZE;
+      //renderWheel(currentWheelPrizes);
+
     } else {
-      targetIndex = Math.floor(Math.random()*currentWheelPrizes.length);
+      // FIRST SPIN = sister's configured prize
+      targetPrize = currentWheelPrizes.find(
+        p => p.id === activeSister.riggedPrizeId
+      );
+
+      if(!targetPrize){
+        targetPrize = currentWheelPrizes[
+          Math.floor(Math.random()*currentWheelPrizes.length)
+        ];
+      }
     }
 
     const n = currentWheelPrizes.length;
     const slice = 360/n;
+
+    let targetIndex = currentWheelPrizes.findIndex(
+      p => p.id === targetPrize.id
+    );
+
     const sliceCenter = targetIndex*slice + slice/2;
-    const jitter = (Math.random()-0.5) * (slice*0.5);
+    const jitter = n > 1 ? (Math.random()-0.5) * (slice*0.5) : 0;
     const targetAngle = ((sliceCenter + jitter) % 360 + 360) % 360;
 
     const currentMod = ((currentRotation % 360) + 360) % 360;
+
     let delta = (360 - targetAngle) - currentMod;
     delta = ((delta % 360) + 360) % 360;
+
     const extraSpins = 6*360;
     currentRotation += extraSpins + delta;
 
     spinning = true;
     spinBtn.disabled = true;
+
     wheelEl.style.transform = `rotate(${currentRotation}deg)`;
 
     const spinDurationMs = SPIN_DURATION_SECONDS * 1000;
+
     getCtx().resume();
-    scheduleSpinTicks(extraSpins + delta, spinDurationMs, currentWheelPrizes.length);
+
+    scheduleSpinTicks(
+      extraSpins + delta,
+      spinDurationMs,
+      currentWheelPrizes.length
+    );
 
     setTimeout(()=>{
       spinning = false;
       spinBtn.disabled = false;
-      const prize = currentWheelPrizes[targetIndex];
-      resultName.textContent = activeSister.name + ', You deserved it! ❤️';
-      resultPrize.textContent = prize.label;
+
+      resultName.textContent =
+        activeSister.name + ', You deserved it! ❤️';
+
+      resultPrize.textContent = targetPrize.label;
+
       overlay.classList.add('show');
+
       spawnConfetti();
       playRevealFanfare();
+
+      // Remember that this person has completed one spin
+      incrementSpinCount(activeSister.name);
+
     }, spinDurationMs + 100);
   };
-
   document.getElementById('closeResult').onclick = ()=>{
     overlay.classList.remove('show');
   };
