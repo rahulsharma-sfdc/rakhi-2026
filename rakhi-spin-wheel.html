@@ -602,7 +602,7 @@
 
   function resolveSister(){
     const params = new URLSearchParams(window.location.search);
-    const nameParam = params.get('name');
+    let nameParam = params.get('name');
     if (!nameParam)
       nameParam = 'Anonymus';
 
